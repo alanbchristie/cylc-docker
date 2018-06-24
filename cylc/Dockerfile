@@ -81,3 +81,5 @@ ENV HOME ${USER_ROOT}
 ENV PATH="/opt/cylc/bin:${PATH}"
 RUN cylc check-software 2> /dev/null && \
 	cylc version
+
+CMD /bin/bash
