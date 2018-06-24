@@ -59,6 +59,10 @@ RUN cd /opt && \
 	cd cylc && \
 	git checkout ${CYLC_V} 2> /dev/null
 
+# Useful extra stuff...
+RUN apt-get -y install \
+        vim
+
 # Containers should NOT run as root
 # (as good practice)
 ENV USER_ROOT /home/cylc
@@ -68,6 +72,9 @@ WORKDIR ${USER_ROOT}
 ENV PATH="/opt/cylc/bin:${PATH}"
 COPY requirements.txt ${USER_ROOT}/
 RUN pip install -r requirements.txt
+
+# Chnage ownership of 'HOME'
+RUN chown -R cylc:cylc ${USER_ROOT}
 
 USER 6000
 ENV HOME ${USER_ROOT}
