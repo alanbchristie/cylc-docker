@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+
+  cycle:
+    build: .
+    image: alanbchristie/cylc:7.7.0
+    container_name: cylc
