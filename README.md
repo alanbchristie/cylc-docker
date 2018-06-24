@@ -1,7 +1,7 @@
-# A Docker container for CYLC
-Here we have a very basic container image for CYLC.
-I'm still learning/evaluating CYLC so hopefully this container image works.
-It contains CYLC `7.7.0` and appears to respond to basic commands (`version`
+# A Docker image for Cylc
+Here we have a very basic container image for [Cylc].
+I'm still learning/evaluating Cylc so hopefully this container image works.
+It contains Cylc `7.7.0` and appears to respond to basic commands (`version`
 and `check-software`).
 
 ## Building the image
@@ -21,6 +21,8 @@ you can run the following to get to the user shell: -
     docker run -it --rm alanbchristie/cylc:7.7.0 /bin/bash
 
 ---
+
+[cylc]: https://cylc.github.io/cylc/
 
 Alan Christie
 June 2018
