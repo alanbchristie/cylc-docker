@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 FROM ubuntu:18.04
-LABEL maintainer="alanbchritsie"
+LABEL maintainer="alanbchristie"
 
 # A docker container with cylc installed based on Bruno P. Kinoshita work.
 # With additional contributions from Alan Christie (alanbchritie): -
@@ -73,7 +73,7 @@ ENV PATH="/opt/cylc/bin:${PATH}"
 COPY requirements.txt ${USER_ROOT}/
 RUN pip install -r requirements.txt
 
-# Chnage ownership of 'HOME'
+# Change ownership of 'HOME' and cylc
 RUN chown -R cylc:cylc ${USER_ROOT}
 
 USER 6000
