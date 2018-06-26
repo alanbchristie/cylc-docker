@@ -21,14 +21,14 @@
 # SOFTWARE.
 
 FROM ubuntu:18.04
-LABEL maintainer="alanbchristie"
+
+LABEL maintainer=${cylc_docker_owner}
+LABEL version=${cylc_docker_v}
 
 # A docker container with cylc installed based on Bruno P. Kinoshita work.
 # With additional contributions from Alan Christie (alanbchritie): -
 # - Non-root container
 # - Use of Ubuntu 18.04
-# - Move to CYLC 7.7.0
-ENV CYLC_V 7.7.0
 
 RUN apt-get -y update && \
 	apt-get -y upgrade
@@ -57,7 +57,7 @@ RUN apt-get -y install \
 RUN cd /opt && \
 	git clone https://github.com/cylc/cylc.git && \
 	cd cylc && \
-	git checkout ${CYLC_V} 2> /dev/null
+	git checkout ${cylc_docker_v} 2> /dev/null
 
 # Useful extra stuff...
 RUN apt-get -y install \

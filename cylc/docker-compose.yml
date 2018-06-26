@@ -1,8 +1,26 @@
-version: '3'
+---
+
+# Cylc Docker-Compose file.
+#
+# You can control some of the behaviour of the build
+# with a few environment variables: -
+#
+# - CYLC_DOCKER_V     The chosen Cylc version
+#                     (default 7.7.0)
+# - CYLC_DOCKER_OWNER The chosen owner of the image
+#                     which is used to form the basename of the image
+#                     and a maintainer label.
+#                     (default alanbchristie)
+
+version: '3.6'
 
 services:
 
   cylc:
-    build: .
-    image: alanbchristie/cylc:7.7.0
+    build:
+      context: .
+      args:
+        cylc_docker_v: "${CYLC_DOCKER_V:-7.7.0}"
+        cylc_docker_owner: "${CYLC_DOCKER_OWNER:-alanbchristie}"
+    image: "${CYLC_DOCKER_OWNER:-alanbchristie}/cylc:${CYLC_DOCKER_V:-7.7.0}"
     container_name: cylc
