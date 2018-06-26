@@ -66,7 +66,8 @@ RUN apt-get -y install \
 # Containers should NOT run as root
 # (as good practice)
 ENV USER_ROOT /home/cylc
-RUN useradd --shell /bin/bash --user-group --uid 6000 --home-dir ${USER_ROOT} cylc
+ENV USER_ID 6000
+RUN useradd --shell /bin/bash --user-group --uid ${USER_ID} --home-dir ${USER_ROOT} cylc
 
 WORKDIR ${USER_ROOT}
 ENV PATH="/opt/cylc/bin:${PATH}"
@@ -76,7 +77,7 @@ RUN pip install -r requirements.txt
 # Change ownership of 'HOME' and cylc
 RUN chown -R cylc:cylc ${USER_ROOT}
 
-USER 6000
+USER ${USER_ID}
 ENV HOME ${USER_ROOT}
 ENV PATH="/opt/cylc/bin:${PATH}"
 RUN cylc check-software 2> /dev/null && \
