@@ -61,24 +61,34 @@ RUN cd /opt && \
 
 # Useful extra stuff...
 RUN apt-get -y install \
+        at \
+        systemd \
         vim
 
 # Containers should NOT run as root
 # (as good practice)
-ENV USER_ROOT /home/cylc
+ENV USER_NAME cylc
+ENV USER_ROOT /home/${USER_NAME}
 ENV USER_ID 6000
-RUN useradd --shell /bin/bash --user-group --uid ${USER_ID} --home-dir ${USER_ROOT} cylc
+RUN useradd --shell /bin/bash --user-group --uid ${USER_ID} --home-dir ${USER_ROOT} ${USER_NAME}
 
 WORKDIR ${USER_ROOT}
 ENV PATH="/opt/cylc/bin:${PATH}"
 COPY requirements.txt ${USER_ROOT}/
 RUN pip install -r requirements.txt
 
-# Change ownership of 'HOME' and cylc
-RUN chown -R cylc:cylc ${USER_ROOT}
+# Change ownerships...
+RUN chown -R ${USER_NAME}:${USER_NAME} ${USER_ROOT}
+RUN chown -R ${USER_NAME}:${USER_NAME} /tmp
+RUN chown -R ${USER_NAME}:${USER_NAME} /opt/cylc
+
+# Start atd for job scheduling
+#RUN service atd start
 
 USER ${USER_ID}
 ENV HOME ${USER_ROOT}
+ENV PYTHONHTTPSVERIFY 0
+ENV PYTHONWARNINGS ignore
 ENV PATH="/opt/cylc/bin:${PATH}"
 RUN cylc check-software 2> /dev/null && \
 	cylc version
