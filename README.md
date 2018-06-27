@@ -1,8 +1,11 @@
 # A Docker image for Cylc
 Here we have a very basic container image for [Cylc].
-I'm still learning/evaluating Cylc so hopefully this container image works.
-It contains Cylc `7.7.1` and appears to respond to basic commands (`version`
-and `check-software`).
+Cylc is a workflow engine for running suites of inter-dependent jobs.
+I'm still learning/evaluating Cylc so hopefully this container image helps
+you get started with Cylc. It contains Cylc `7.7.1`.
+
+There's also nice introductory Cylc online [tutorial] from the guys behind
+[Rose].
 
 ## Building the image
 You should find an image on Docker Hub or you can use `docker` or
@@ -70,6 +73,8 @@ your container image and the GUI will appear, managed by your host.
 
 [article]: https://cntnr.io/running-guis-with-docker-on-mac-os-x-a14df6a76efc
 [cylc]: https://cylc.github.io/cylc/
+[rose]: https://metomi.github.io/rose/doc/html/index.html
+[tutorial]: https://metomi.github.io/rose/doc/html/tutorial/cylc/index.html
 
 Alan Christie  
 June 2018
