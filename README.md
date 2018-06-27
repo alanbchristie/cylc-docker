@@ -1,7 +1,7 @@
 # A Docker image for Cylc
 Here we have a very basic container image for [Cylc].
 I'm still learning/evaluating Cylc so hopefully this container image works.
-It contains Cylc `7.7.0` and appears to respond to basic commands (`version`
+It contains Cylc `7.7.1` and appears to respond to basic commands (`version`
 and `check-software`).
 
 ## Building the image
@@ -11,15 +11,22 @@ and run: -
 
     docker-compose build
      
-This should create the image (`alanbchristie/cylc:7.7.0`).
+This should create the image.
 
 >   I'm using OSX (10.13.5) and docker-compose (1.21.1)
+
+You can change the image basename and the Cylc version without editing the
+files by using the following environment variables (refer to the
+`docker-compose.yml` for details): -
+
+    CYLC_DOCKER_V
+    CYLC_DOCKER_OWNER
 
 ## Running the image
 To spin the image up, you can run the following to get to the `cylc` user's
 bash shell: -
 
-    docker run -it --rm alanbchristie/cylc:7.7.0
+    docker run -it --rm alanbchristie/cylc:7.7.1
 
 ## Running with the GUI (OSX)
 Thanks to Nils De Moor's [article] it's relatively straightforward to get
@@ -54,7 +61,7 @@ Obtain your host's IP address and use the IP address to define the
 `DISPLAY` environment variable while starting the Cylc container. i.e. run: -
 
     ADDR=$(ifconfig en0 | grep inet | cut -f 2 -d ' ')
-    docker run -it --rm -e DISPLAY=$ADDR:0 alanbchristie/cylc:7.7.0
+    docker run -it --rm -e DISPLAY=$ADDR:0 alanbchristie/cylc:7.7.1
 
 With that done you should be able to run `gcylc &` from the shell in
 your container image and the GUI will appear, managed by your host.

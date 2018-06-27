@@ -22,13 +22,17 @@
 
 FROM ubuntu:18.04
 
+ARG cylc_docker_owner=alanbchristie
+ARG cylc_docker_v=7.7.1
+
 LABEL maintainer=${cylc_docker_owner}
 LABEL version=${cylc_docker_v}
 
 # A docker container with cylc installed based on Bruno P. Kinoshita work.
 # With additional contributions from Alan Christie (alanbchritie): -
-# - Non-root container
+# - Non-root container user
 # - Use of Ubuntu 18.04
+# - Installtion of sudo and at/atd
 
 RUN apt-get -y update && \
 	apt-get -y upgrade
@@ -49,43 +53,48 @@ RUN apt-get -y install \
         graphviz graphviz-dev libgraphviz-dev \
         sqlite \
         python-gtk2-dev \
-        python-pygraphviz
-
-RUN apt-get -y install \
-        imagemagick php-imagick
-
-RUN cd /opt && \
-	git clone https://github.com/cylc/cylc.git && \
-	cd cylc && \
-	git checkout ${cylc_docker_v} 2> /dev/null
-
-# Useful extra stuff...
-RUN apt-get -y install \
+        python-pygraphviz \
+        imagemagick php-imagick \
         at \
+        sudo \
         systemd \
         vim
 
+WORKDIR /opt
+RUN git clone https://github.com/cylc/cylc.git && \
+    cd cylc && \
+    git checkout tags/${cylc_docker_v} 2> /dev/null
+
 # Containers should NOT run as root
 # (as good practice)
+# And add the user to the daemon group (so it can run daemons like atd)
+# and the sudo group
 ENV USER_NAME cylc
 ENV USER_ROOT /home/${USER_NAME}
 ENV USER_ID 6000
-RUN useradd --shell /bin/bash --user-group --uid ${USER_ID} --home-dir ${USER_ROOT} ${USER_NAME}
+RUN useradd --shell /bin/bash --uid ${USER_ID} --gid root --home-dir ${USER_ROOT} ${USER_NAME} && \
+    usermod -a -G daemon ${USER_NAME} && \
+    usermod -a -G sudo ${USER_NAME}
 
 WORKDIR ${USER_ROOT}
-ENV PATH="/opt/cylc/bin:${PATH}"
 COPY requirements.txt ${USER_ROOT}/
+COPY docker-entrypoint.sh ${USER_ROOT}/
 RUN pip install -r requirements.txt
 
 # Change ownerships...
-RUN chown -R ${USER_NAME}:${USER_NAME} ${USER_ROOT}
-RUN chown -R ${USER_NAME}:${USER_NAME} /tmp
-RUN chown -R ${USER_NAME}:${USER_NAME} /opt/cylc
+# and permissions, sudoers etc...
+RUN chown -R ${USER_NAME} ${USER_ROOT} && \
+    chown -R ${USER_NAME} /tmp && \
+    chown -R ${USER_NAME} /opt/cylc && \
+    chmod +x docker-entrypoint.sh && \
+    echo "${USER_NAME} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER_NAME} && \
+    chmod 0440 /etc/sudoers.d/${USER_NAME}
 
-# Start atd for job scheduling
-#RUN service atd start
-
+# All delicate stuff done
+# we can now switch to our non-root user...
 USER ${USER_ID}
+
+ENV PATH="/opt/cylc/bin:${PATH}"
 ENV HOME ${USER_ROOT}
 ENV PYTHONHTTPSVERIFY 0
 ENV PYTHONWARNINGS ignore
@@ -93,4 +102,4 @@ ENV PATH="/opt/cylc/bin:${PATH}"
 RUN cylc check-software 2> /dev/null && \
 	cylc version
 
-CMD /bin/bash
+CMD ./docker-entrypoint.sh
