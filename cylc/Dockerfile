@@ -79,6 +79,10 @@ RUN useradd --shell /bin/bash --uid ${USER_ID} --gid root --home-dir ${USER_ROOT
 WORKDIR ${USER_ROOT}
 COPY requirements.txt ${USER_ROOT}/
 COPY docker-entrypoint.sh ${USER_ROOT}/
+# Copy the examples in
+COPY cylc-run cylc-run/
+
+# Install the Python stuff we need
 RUN pip install -r requirements.txt
 
 # Change ownerships...

@@ -1,0 +1,20 @@
+[scheduling]
+    # The tutorial example.
+    # See https://metomi.github.io/rose/doc/html/tutorial/cylc/index.html
+    cycling mode = integer
+    initial cycle point = 1
+    [[dependencies]]
+        [[[P1]]]
+            graph = """
+                foo & pub => bar => baz & wop
+                wop[-P1] => pub
+            """
+        [[[P2]]]
+            graph = """
+                baz => qux
+                baz[-P1] => foo
+            """
+        [[[2/P2]]]
+            graph = """
+                qux[-P1] => foo
+            """
