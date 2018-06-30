@@ -1,0 +1,36 @@
+# The basic weather-forecasting workflow from the tutorial.
+[cylc]
+    UTC mode = True
+[scheduling]
+    initial cycle point = 2000-01-01T00Z
+    [[dependencies]]
+        [[[PT3H]]]
+            # Our dummy weather forecast will get wind observations from
+            # four weather stations every three hours.
+            # These are used by consolidate_observations.
+            graph = """
+                get_observations_belmullet => consolidate_observations
+                get_observations_camborne => consolidate_observations
+                get_observations_heathrow => consolidate_observations
+                get_observations_shetland => consolidate_observations
+            """
+        [[[+PT6H/PT6H]]]
+            # The forecast will run every six hours starting six hours after
+            # the initial cycle point and will be dependent on get_rainfall
+            # running every six hours anf the consolidate_observations task
+            # from te current and two previous cycles (-3h and -6h).
+            # We then post-process the data for a specific city (Exeter).
+            graph = """
+                consolidate_observations[-PT6H] => forecast
+                consolidate_observations[-PT3H] => forecast
+                consolidate_observations => forecast
+                get_rainfall => forecast => post_process_exeter
+            """
+        [[[+PT12H/PT6H]]]
+            # Because we depend on data from two previous observations
+            # and the cycle reate is 3 hours we need to but a dependence on
+            # the forecast that stops it running until 12 hours past the
+            # initial cycle.
+            graph = """
+                forecast[-PT6H] => forecast
+            """
