@@ -23,7 +23,7 @@
 FROM ubuntu:18.04
 
 ARG cylc_docker_owner=alanbchristie
-ARG cylc_docker_v=7.7.1
+ARG cylc_docker_v=7.7.2
 
 LABEL maintainer=${cylc_docker_owner}
 LABEL version=${cylc_docker_v}

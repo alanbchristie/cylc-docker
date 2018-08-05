@@ -2,7 +2,7 @@
 Here we have a very basic container image for [Cylc].
 Cylc is a workflow engine for running suites of inter-dependent jobs.
 I'm still learning/evaluating Cylc so hopefully this container image helps
-you get started with Cylc. It contains Cylc `7.7.1`.
+you get started with Cylc. It contains Cylc `7.7.2`.
 
 There's also nice introductory Cylc online [tutorial] from the guys behind
 [Rose].
@@ -16,7 +16,7 @@ and run: -
      
 This should create the image.
 
->   I'm using OSX (10.13.5) and docker-compose (1.21.1)
+>   I'm using OSX (10.13.6) and docker-compose (1.22.0)
 
 You can change the image basename and the Cylc version without editing the
 files by using the following environment variables (refer to the
@@ -29,7 +29,7 @@ files by using the following environment variables (refer to the
 To spin the image up, you can run the following to get to the `cylc` user's
 bash shell: -
 
-    docker run -it --rm alanbchristie/cylc:7.7.1
+    docker run -it --rm alanbchristie/cylc:7.7.2
 
 ## Running with the GUI (OSX)
 Thanks to Nils De Moor's [article] it's relatively straightforward to get
@@ -64,7 +64,7 @@ Obtain your host's IP address and use the IP address to define the
 `DISPLAY` environment variable while starting the Cylc container. i.e. run: -
 
     ADDR=$(ifconfig en0 | grep inet | cut -f 2 -d ' ')
-    docker run -it --rm -e DISPLAY=$ADDR:0 alanbchristie/cylc:7.7.1
+    docker run -it --rm -e DISPLAY=$ADDR:0 alanbchristie/cylc:7.7.2
 
 With that done you should be able to run `gcylc &` from the shell in
 your container image and the GUI will appear, managed by your host.
@@ -77,4 +77,4 @@ your container image and the GUI will appear, managed by your host.
 [tutorial]: https://metomi.github.io/rose/doc/html/tutorial/cylc/index.html
 
 Alan Christie  
-June 2018
+August 2018
