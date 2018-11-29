@@ -6,7 +6,7 @@
 # with a few environment variables: -
 #
 # - CYLC_DOCKER_V     The chosen Cylc version
-#                     (default 7.7.2)
+#                     (default 7.8.0)
 # - CYLC_DOCKER_OWNER The chosen owner of the image
 #                     which is used to form the basename of the image
 #                     and a maintainer label.
@@ -20,7 +20,7 @@ services:
     build:
       context: .
       args:
-        cylc_docker_v: "${CYLC_DOCKER_V:-7.7.2}"
+        cylc_docker_v: "${CYLC_DOCKER_V:-7.8.0}"
         cylc_docker_owner: "${CYLC_DOCKER_OWNER:-alanbchristie}"
-    image: "${CYLC_DOCKER_OWNER:-alanbchristie}/cylc:${CYLC_DOCKER_V:-7.7.2}"
+    image: "${CYLC_DOCKER_OWNER:-alanbchristie}/cylc:${CYLC_DOCKER_V:-7.8.0}"
     container_name: cylc

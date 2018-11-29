@@ -1,0 +1,6 @@
+[runtime]
+    [[ hello ]]
+        script = "sleep 10; echo Hello World!"
+        [[[ remote ]]]
+            host = server1.niwa.co.nz
+            retrieve job logs = True

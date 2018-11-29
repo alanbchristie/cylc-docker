@@ -23,7 +23,7 @@
 FROM ubuntu:18.04
 
 ARG cylc_docker_owner=alanbchristie
-ARG cylc_docker_v=7.7.2
+ARG cylc_docker_v=7.8.0
 
 LABEL maintainer=${cylc_docker_owner}
 LABEL version=${cylc_docker_v}
@@ -32,7 +32,7 @@ LABEL version=${cylc_docker_v}
 # With additional contributions from Alan Christie (alanbchritie): -
 # - Non-root container user
 # - Use of Ubuntu 18.04
-# - Installtion of sudo and at/atd
+# - Installation of sudo and at/atd
 
 RUN apt-get -y update && \
 	apt-get -y upgrade
@@ -80,10 +80,14 @@ WORKDIR ${USER_ROOT}
 COPY requirements.txt ${USER_ROOT}/
 COPY docker-entrypoint.sh ${USER_ROOT}/
 # Copy the examples in
-COPY cylc-run cylc-run/
+COPY examples examples/
 
 # Install the Python stuff we need
 RUN pip install -r requirements.txt
+
+# SSH
+RUN mkdir ${USER_ROOT}/.ssh
+COPY ssh/id_ecdsa ${USER_ROOT}/.ssh/
 
 # Change ownerships...
 # and permissions, sudoers etc...
@@ -91,6 +95,8 @@ RUN chown -R ${USER_NAME} ${USER_ROOT} && \
     chown -R ${USER_NAME} /tmp && \
     chown -R ${USER_NAME} /opt/cylc && \
     chmod +x docker-entrypoint.sh && \
+    chmod 0700 ${USER_ROOT}/.ssh && \
+    chmod 0600 ${USER_ROOT}/.ssh/id_ecdsa && \
     echo "${USER_NAME} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER_NAME} && \
     chmod 0440 /etc/sudoers.d/${USER_NAME}
 

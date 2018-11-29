@@ -1,4 +1,10 @@
 .idea/
+docker/ssh/*
+packer/scaleway/template.json
+packer/scaleway/variables.json
+packer/scaleway/*.pem
+
+**/.DS_Store
 
 # Created by .ignore support plugin (hsz.mobi)
 ### JetBrains template
