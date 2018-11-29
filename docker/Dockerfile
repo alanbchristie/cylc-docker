@@ -85,9 +85,8 @@ COPY examples examples/
 # Install the Python stuff we need
 RUN pip install -r requirements.txt
 
-# SSH
+# SSH Dir
 RUN mkdir ${USER_ROOT}/.ssh
-COPY ssh/id_ecdsa ${USER_ROOT}/.ssh/
 
 # Change ownerships...
 # and permissions, sudoers etc...
@@ -96,7 +95,6 @@ RUN chown -R ${USER_NAME} ${USER_ROOT} && \
     chown -R ${USER_NAME} /opt/cylc && \
     chmod +x docker-entrypoint.sh && \
     chmod 0700 ${USER_ROOT}/.ssh && \
-    chmod 0600 ${USER_ROOT}/.ssh/id_ecdsa && \
     echo "${USER_NAME} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER_NAME} && \
     chmod 0440 /etc/sudoers.d/${USER_NAME}
 
