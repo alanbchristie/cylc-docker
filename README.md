@@ -39,7 +39,7 @@ files by using the following environment variables (refer to the
 To spin the image up, you can run the following to get to the `cylc` user's
 bash shell: -
 
-    docker run -it --rm alanbchristie/cylc:7.7.2
+    docker run -it --rm alanbchristie/cylc:7.8.0
 
 ### Running with the GUI (OSX)
 Thanks to Nils De Moor's [article] it's relatively straightforward to get
@@ -74,7 +74,7 @@ Obtain your host's IP address and use the IP address to define the
 `DISPLAY` environment variable while starting the Cylc container. i.e. run: -
 
     ADDR=$(ifconfig en0 | grep inet | cut -f 2 -d ' ')
-    docker run -it --rm -e DISPLAY=$ADDR:0 alanbchristie/cylc:7.7.2
+    docker run -it --rm -e DISPLAY=$ADDR:0 alanbchristie/cylc:7.8.0
 
 With that done you should be able to run `gcylc &` from the shell in
 your container image and the GUI will appear, managed by your host.
