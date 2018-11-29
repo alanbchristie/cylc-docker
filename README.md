@@ -91,10 +91,24 @@ This builds a CentOS 7 image containing Cylc and a `cylc` user.
     file for the public key in `packer/files/authorized_keys` you'll need to
     provide your own `authorized_keys` file.
 
+## Creating cylc.zip
+It's a stripped-down copy of the 7.8.0 source: -
+
+    export CYLC_V=7.8.0
+    cd ~/Downloads
+    git clone https://github.com/cylc/cylc.git
+    cd cylc
+    git checkout tags/$CYLC_V
+    rm -rf .git
+    rm -rf tests
+    rm -rf doc
+    echo $CYLC_V > VERSION
+    cd ..
+    zip -r cylc.zip cylc
+    
 ## SSH keys
 You need to generate an SSH key pair to allow the docker and cyle images
-to communicate remotely. They are expected to use the **ecdsa** algorithm
-and use the default name. These keys are not committed to revision control.
+to communicate remotely. These keys are not committed to revision control.
 
 Here's an example that creates an SSH key pair for thew build
 that has no pass phrase: -

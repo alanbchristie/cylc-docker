@@ -1,3 +1,8 @@
+[meta]
+    title = "Cylc Remote Hello World!"
+[scheduling]
+    [[dependencies]]
+        graph = "hello"
 [runtime]
     [[ hello ]]
         script = "sleep 10; echo Hello World!"

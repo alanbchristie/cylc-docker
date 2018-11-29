@@ -2,6 +2,7 @@
     title = "The cylc Hello World! suite"
 [scheduling]
     [[ dependencies ]]
-        graph = "hello" [runtime]
+        graph = "hello"
+[runtime]
     [[ hello ]]
         script = "sleep 10; echo Hello World!"
