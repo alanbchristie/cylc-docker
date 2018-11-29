@@ -1,0 +1,4 @@
+machine_type: START1-S
+machine_user: root
+our_name: Cylc 7.8.0
+image_name: cylc-7-8-0-centos7-4

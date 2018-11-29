@@ -1,0 +1,101 @@
+---
+
+# Packer machine image configuration.
+#
+# This configuration builds a Centos 7 machine image
+# that also contains the Cylc environment.
+
+provisioners:
+
+- type: file
+  source: ../files/requirements.txt
+  destination: /tmp/
+
+- type: file
+  source: ../files/cylc.sh
+  destination: /tmp/
+
+- type: file
+  source: ../files/cylc.zip
+  destination: /tmp/
+
+- type: file
+  source: ../files/authorized_keys
+  destination: /tmp/
+
+- type: shell
+  inline:
+  - sudo yum -y update
+  - sudo yum -y install python python-dev python-pip
+  - sudo yum -y install pkg-config sqlite at sudo systemd vim unzip
+
+  # Install cylc...
+
+  - sudo mkdir -p /opt
+  - sudo unzip /tmp/cylc.zip -d /opt
+
+  # Add PATH...
+
+  - sudo mv /tmp/cylc.sh /etc/profile.d
+  - sudo chown root.root /etc/profile.d/cylc.sh
+  - sudo chmod 0644 /etc/profile.d/cylc.sh
+
+  # Cylc Python bits...
+
+  - sudo pip install -r /tmp/requirements.txt
+
+  # Create a cylc user and adjust ownership of some key directories...
+
+  - sudo useradd --shell /bin/bash --uid 6000 --gid root --home-dir /home/cylc cylc
+  - sudo chown -R cylc /opt/cylc
+  - sudo chown -R cylc /tmp
+
+  # Setup SSH for cylc user...
+
+  - sudo mkdir -p /home/cylc/.ssh
+  - sudo mv /tmp/authorized_keys /home/cylc/.ssh
+  - sudo chmod 0700 /home/cylc/.ssh
+  - sudo chmod 0600 /home/cylc/.ssh/authorized_keys
+  - sudo chown -R cylc /home/cylc
+
+variables:
+
+  api_access_key: "{{env `TF_VAR_sw_organisation`}}"
+  api_token: "{{env `TF_VAR_sw_token`}}"
+  machine_type: ""
+  machine_user: ""
+  our_name: ""
+  image_name: ""
+
+sensitive-variables:
+
+- api_access_key
+- api_token
+
+builders:
+
+# Scaleway Builder - Paris
+
+- type: scaleway
+  api_access_key: "{{user `api_access_key`}}"
+  api_token: "{{user `api_token`}}"
+  image: 37832f54-c18f-4338-a552-113e4302a236
+  region: par1
+  commercial_type: "{{user `machine_type`}}"
+  ssh_username: "{{user `machine_user`}}"
+  image_name: "{{user `our_name`}}"
+  snapshot_name: "{{user `image_name`}}-par1"
+  name: "{{user `image_name`}}-par1"
+
+# Scaleway Builder - Amsterdam
+
+#- type: scaleway
+#  api_access_key: "{{user `api_access_key`}}"
+#  api_token: "{{user `api_token`}}"
+#  image: e338d2ea-262d-45a1-95d2-300adce63cdd
+#  region: ams1
+#  commercial_type: "{{user `machine_type`}}"
+#  ssh_username: "{{user `machine_user`}}"
+#  image_name: "{{user `our_name`}}"
+#  snapshot_name: "{{user `image_name`}}-ams1"
+#  name: "{{user `image_name`}}-ams1"
