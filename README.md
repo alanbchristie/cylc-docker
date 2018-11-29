@@ -81,7 +81,8 @@ your container image and the GUI will appear, managed by your host.
 
 ## Yacker (Scaleway)
 You can built the base images for Scaleway using [Yacker] (a [Packer] wrapper).
-From the `packer/scaleway` directory run the following: -
+Assuming you've satisfied the project's `requirements.txt` then,
+from the `packer/scaleway` directory, run the following: -
 
     yacker build -var-file=variables.yaml template.yaml
 
@@ -89,7 +90,7 @@ This builds a CentOS 7 image containing Cylc and a `cylc` user.
 
 >   In order to SSH to the cylc user account, unless you have the private key
     file for the public key in `packer/files/authorized_keys` you'll need to
-    provide your own `authorized_keys` file.
+    provide your own `authorized_keys` file for the Packer/Yacker image.
 
 ## Creating cylc.zip
 It's a stripped-down copy of the 7.8.0 source: -

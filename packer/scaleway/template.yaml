@@ -89,13 +89,13 @@ builders:
 
 # Scaleway Builder - Amsterdam
 
-#- type: scaleway
-#  api_access_key: "{{user `api_access_key`}}"
-#  api_token: "{{user `api_token`}}"
-#  image: e338d2ea-262d-45a1-95d2-300adce63cdd
-#  region: ams1
-#  commercial_type: "{{user `machine_type`}}"
-#  ssh_username: "{{user `machine_user`}}"
-#  image_name: "{{user `our_name`}}"
-#  snapshot_name: "{{user `image_name`}}-ams1"
-#  name: "{{user `image_name`}}-ams1"
+- type: scaleway
+  api_access_key: "{{user `api_access_key`}}"
+  api_token: "{{user `api_token`}}"
+  image: e338d2ea-262d-45a1-95d2-300adce63cdd
+  region: ams1
+  commercial_type: "{{user `machine_type`}}"
+  ssh_username: "{{user `machine_user`}}"
+  image_name: "{{user `our_name`}}"
+  snapshot_name: "{{user `image_name`}}-ams1"
+  name: "{{user `image_name`}}-ams1"
